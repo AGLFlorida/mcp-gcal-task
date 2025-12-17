@@ -37,8 +37,13 @@ describe('WebSocketTransport', () => {
       }),
       send: jest.fn(),
       close: jest.fn(),
-      readyState: WebSocket.OPEN,
     } as any;
+
+    Object.defineProperty(mockWebSocket, 'readyState', {
+      value: WebSocket.OPEN,
+      writable: true,
+      configurable: true,
+    });
 
     (WebSocket as jest.MockedClass<typeof WebSocket>).mockImplementation(() => {
       return mockWebSocket;
@@ -70,21 +75,33 @@ describe('WebSocketTransport', () => {
 
   describe('start', () => {
     it('should return immediately if WebSocket is already OPEN', async () => {
-      mockWebSocket.readyState = WebSocket.OPEN;
+      Object.defineProperty(mockWebSocket, 'readyState', {
+        value: WebSocket.OPEN,
+        writable: true,
+        configurable: true,
+      });
       transport = new WebSocketTransport(mockWebSocket);
 
       await expect(transport.start()).resolves.toBeUndefined();
     });
 
     it('should wait for open event if WebSocket is not OPEN', async () => {
-      mockWebSocket.readyState = WebSocket.CONNECTING;
+      Object.defineProperty(mockWebSocket, 'readyState', {
+        value: WebSocket.CONNECTING,
+        writable: true,
+        configurable: true,
+      });
       transport = new WebSocketTransport(mockWebSocket);
 
       const startPromise = transport.start();
 
       // Simulate WebSocket opening
       setTimeout(() => {
-        mockWebSocket.readyState = WebSocket.OPEN;
+        Object.defineProperty(mockWebSocket, 'readyState', {
+          value: WebSocket.OPEN,
+          writable: true,
+          configurable: true,
+        });
         if (eventHandlers.open) {
           eventHandlers.open();
         }
@@ -115,7 +132,11 @@ describe('WebSocketTransport', () => {
     });
 
     it('should send JSON stringified message when WebSocket is OPEN', async () => {
-      mockWebSocket.readyState = WebSocket.OPEN;
+      Object.defineProperty(mockWebSocket, 'readyState', {
+        value: WebSocket.OPEN,
+        writable: true,
+        configurable: true,
+      });
       const message = { jsonrpc: '2.0', id: 1, result: { test: 'data' } };
 
       await transport.send(message);
@@ -124,7 +145,11 @@ describe('WebSocketTransport', () => {
     });
 
     it('should throw error when WebSocket is not OPEN', async () => {
-      mockWebSocket.readyState = WebSocket.CLOSED;
+      Object.defineProperty(mockWebSocket, 'readyState', {
+        value: WebSocket.CLOSED,
+        writable: true,
+        configurable: true,
+      });
       const message = { jsonrpc: '2.0', id: 1, result: {} };
 
       await expect(transport.send(message)).rejects.toThrow('WebSocket is not open');
@@ -132,7 +157,11 @@ describe('WebSocketTransport', () => {
     });
 
     it('should throw error when WebSocket is CONNECTING', async () => {
-      mockWebSocket.readyState = WebSocket.CONNECTING;
+      Object.defineProperty(mockWebSocket, 'readyState', {
+        value: WebSocket.CONNECTING,
+        writable: true,
+        configurable: true,
+      });
       const message = { jsonrpc: '2.0', id: 1, result: {} };
 
       await expect(transport.send(message)).rejects.toThrow('WebSocket is not open');

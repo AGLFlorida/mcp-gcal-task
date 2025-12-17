@@ -10,7 +10,16 @@ jest.mock('fs', () => ({
 }));
 
 jest.mock('util', () => ({
-  promisify: jest.fn((fn) => fn),
+  promisify: jest.fn((fn: jest.Mock) => {
+    return jest.fn((...args: any[]) => {
+      return new Promise((resolve, reject) => {
+        fn(...args, (err: Error | null, result?: any) => {
+          if (err) reject(err);
+          else resolve(result);
+        });
+      });
+    });
+  }),
 }));
 
 describe('ProcessManager', () => {
@@ -48,8 +57,11 @@ describe('ProcessManager', () => {
     });
 
     it('should write PID to file successfully', async () => {
-      (fs.writeFile as jest.Mock).mockImplementation((file, data, encoding, callback) => {
-        callback(null);
+      (fs.writeFile as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null);
+        }
       });
 
       await processManager.writePid(mockPid);
@@ -64,8 +76,11 @@ describe('ProcessManager', () => {
 
     it('should throw error when file write fails', async () => {
       const error = new Error('Write failed');
-      (fs.writeFile as jest.Mock).mockImplementation((file, data, encoding, callback) => {
-        callback(error);
+      (fs.writeFile as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(error);
+        }
       });
 
       await expect(processManager.writePid(mockPid)).rejects.toThrow(
@@ -80,11 +95,17 @@ describe('ProcessManager', () => {
     });
 
     it('should read PID from file successfully', async () => {
-      (fs.access as jest.Mock).mockImplementation((file, mode, callback) => {
-        callback(null);
+      (fs.access as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null);
+        }
       });
-      (fs.readFile as jest.Mock).mockImplementation((file, encoding, callback) => {
-        callback(null, mockPid.toString());
+      (fs.readFile as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null, mockPid.toString());
+        }
       });
 
       const result = await processManager.readPid();
@@ -102,8 +123,13 @@ describe('ProcessManager', () => {
     });
 
     it('should return null when file does not exist', async () => {
-      (fs.access as jest.Mock).mockImplementation((file, mode, callback) => {
-        callback(new Error('File not found'));
+      const error = new Error('File not found') as NodeJS.ErrnoException;
+      error.code = 'ENOENT';
+      (fs.access as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(error);
+        }
       });
 
       const result = await processManager.readPid();
@@ -113,11 +139,17 @@ describe('ProcessManager', () => {
     });
 
     it('should return null when PID is invalid (NaN)', async () => {
-      (fs.access as jest.Mock).mockImplementation((file, mode, callback) => {
-        callback(null);
+      (fs.access as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null);
+        }
       });
-      (fs.readFile as jest.Mock).mockImplementation((file, encoding, callback) => {
-        callback(null, 'invalid-pid');
+      (fs.readFile as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null, 'invalid-pid');
+        }
       });
 
       const result = await processManager.readPid();
@@ -126,11 +158,17 @@ describe('ProcessManager', () => {
     });
 
     it('should return null when PID file is empty', async () => {
-      (fs.access as jest.Mock).mockImplementation((file, mode, callback) => {
-        callback(null);
+      (fs.access as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null);
+        }
       });
-      (fs.readFile as jest.Mock).mockImplementation((file, encoding, callback) => {
-        callback(null, '');
+      (fs.readFile as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null, '');
+        }
       });
 
       const result = await processManager.readPid();
@@ -139,11 +177,17 @@ describe('ProcessManager', () => {
     });
 
     it('should handle whitespace in PID file', async () => {
-      (fs.access as jest.Mock).mockImplementation((file, mode, callback) => {
-        callback(null);
+      (fs.access as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null);
+        }
       });
-      (fs.readFile as jest.Mock).mockImplementation((file, encoding, callback) => {
-        callback(null, '  12345  ');
+      (fs.readFile as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null, '  12345  ');
+        }
       });
 
       const result = await processManager.readPid();
@@ -151,17 +195,22 @@ describe('ProcessManager', () => {
       expect(result).toBe(mockPid);
     });
 
-    it('should return null when readFile fails', async () => {
-      (fs.access as jest.Mock).mockImplementation((file, mode, callback) => {
-        callback(null);
+    it('should throw when readFile fails with unexpected error', async () => {
+      (fs.access as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null);
+        }
       });
-      (fs.readFile as jest.Mock).mockImplementation((file, encoding, callback) => {
-        callback(new Error('Read failed'));
+      const readError = new Error('Read failed');
+      (fs.readFile as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(readError);
+        }
       });
 
-      const result = await processManager.readPid();
-
-      expect(result).toBeNull();
+      await expect(processManager.readPid()).rejects.toThrow('Read failed');
     });
   });
 
@@ -171,11 +220,17 @@ describe('ProcessManager', () => {
     });
 
     it('should remove PID file successfully', async () => {
-      (fs.access as jest.Mock).mockImplementation((file, mode, callback) => {
-        callback(null);
+      (fs.access as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null);
+        }
       });
-      (fs.unlink as jest.Mock).mockImplementation((file, callback) => {
-        callback(null);
+      (fs.unlink as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null);
+        }
       });
 
       await processManager.removePidFile();
@@ -191,23 +246,35 @@ describe('ProcessManager', () => {
     });
 
     it('should not throw when file does not exist', async () => {
-      (fs.access as jest.Mock).mockImplementation((file, mode, callback) => {
-        callback(new Error('File not found'));
+      const error = new Error('File not found') as NodeJS.ErrnoException;
+      error.code = 'ENOENT';
+      (fs.access as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(error);
+        }
       });
 
       await expect(processManager.removePidFile()).resolves.not.toThrow();
       expect(fs.unlink).not.toHaveBeenCalled();
     });
 
-    it('should not throw when unlink fails', async () => {
-      (fs.access as jest.Mock).mockImplementation((file, mode, callback) => {
-        callback(null);
+    it('should throw when unlink fails with unexpected error', async () => {
+      (fs.access as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(null);
+        }
       });
-      (fs.unlink as jest.Mock).mockImplementation((file, callback) => {
-        callback(new Error('Unlink failed'));
+      const unlinkError = new Error('Unlink failed');
+      (fs.unlink as unknown as jest.Mock).mockImplementation((...args: any[]) => {
+        const callback = args[args.length - 1];
+        if (typeof callback === 'function') {
+          callback(unlinkError);
+        }
       });
 
-      await expect(processManager.removePidFile()).resolves.not.toThrow();
+      await expect(processManager.removePidFile()).rejects.toThrow('Unlink failed');
     });
   });
 
@@ -226,8 +293,10 @@ describe('ProcessManager', () => {
     });
 
     it('should return false when process does not exist', () => {
+      const error = new Error('Process not found') as NodeJS.ErrnoException;
+      error.code = 'ESRCH';
       (process.kill as jest.Mock).mockImplementation(() => {
-        throw new Error('Process not found');
+        throw error;
       });
 
       const result = processManager.isProcessRunning(mockPid);
@@ -237,8 +306,10 @@ describe('ProcessManager', () => {
     });
 
     it('should return false when process.kill throws any error', () => {
+      const error = new Error('ESRCH') as NodeJS.ErrnoException;
+      error.code = 'ESRCH';
       (process.kill as jest.Mock).mockImplementation(() => {
-        throw new Error('ESRCH');
+        throw error;
       });
 
       const result = processManager.isProcessRunning(mockPid);

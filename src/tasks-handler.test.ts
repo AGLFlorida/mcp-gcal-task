@@ -44,13 +44,15 @@ describe('GoogleTasksHandler', () => {
 
       try {
         await tasksHandler.listTaskLists();
+        expect(true).toBe(false); // Should not reach here
       } catch (error) {
         // Expected to throw
-        expect(error).toBeUndefined();
+        expect(error).toBeDefined();
+        expect(error).toBeInstanceOf(Error);
       }
 
       expect(mockAuthManager.getGrpcCredentials).toHaveBeenCalled();
-      expect(mockAuthManager.getMetadata).toHaveBeenCalled();
+      // getMetadata is not called because getClient() throws before it's reached
     });
 
     it('should wrap errors with descriptive message', async () => {
@@ -89,13 +91,15 @@ describe('GoogleTasksHandler', () => {
 
       try {
         await tasksHandler.createTask(createRequest);
+        expect(true).toBe(false); // Should not reach here
       } catch (error) {
         // Expected to throw
-        expect(error).toBeUndefined();
+        expect(error).toBeDefined();
+        expect(error).toBeInstanceOf(Error);
       }
 
       expect(mockAuthManager.getGrpcCredentials).toHaveBeenCalled();
-      expect(mockAuthManager.getMetadata).toHaveBeenCalled();
+      // getMetadata is not called because getClient() throws before it's reached
     });
 
     it('should handle task with minimal required fields', async () => {
@@ -146,13 +150,15 @@ describe('GoogleTasksHandler', () => {
 
       try {
         await tasksHandler.listTasks(listRequest);
+        expect(true).toBe(false); // Should not reach here
       } catch (error) {
         // Expected to throw
-        expect(error).toBeUndefined();
+        expect(error).toBeDefined();
+        expect(error).toBeInstanceOf(Error);
       }
 
       expect(mockAuthManager.getGrpcCredentials).toHaveBeenCalled();
-      expect(mockAuthManager.getMetadata).toHaveBeenCalled();
+      // getMetadata is not called because getClient() throws before it's reached
     });
 
     it('should handle request with optional parameters', async () => {
@@ -204,13 +210,15 @@ describe('GoogleTasksHandler', () => {
 
       try {
         await tasksHandler.updateTask(updateRequest);
+        expect(true).toBe(false); // Should not reach here
       } catch (error) {
         // Expected to throw
-        expect(error).toBeUndefined();
+        expect(error).toBeDefined();
+        expect(error).toBeInstanceOf(Error);
       }
 
       expect(mockAuthManager.getGrpcCredentials).toHaveBeenCalled();
-      expect(mockAuthManager.getMetadata).toHaveBeenCalled();
+      // getMetadata is not called because getClient() throws before it's reached
     });
 
     it('should handle partial task updates', async () => {
@@ -261,13 +269,15 @@ describe('GoogleTasksHandler', () => {
 
       try {
         await tasksHandler.deleteTask(deleteRequest);
+        expect(true).toBe(false); // Should not reach here
       } catch (error) {
         // Expected to throw
-        expect(error).toBeUndefined();
+        expect(error).toBeDefined();
+        expect(error).toBeInstanceOf(Error);
       }
 
       expect(mockAuthManager.getGrpcCredentials).toHaveBeenCalled();
-      expect(mockAuthManager.getMetadata).toHaveBeenCalled();
+      // getMetadata is not called because getClient() throws before it's reached
     });
 
     it('should wrap errors with descriptive message', async () => {

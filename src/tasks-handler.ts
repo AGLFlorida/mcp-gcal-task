@@ -84,7 +84,7 @@ export class GoogleTasksHandler {
       // Example: this.tasksService = new tasksProto.TasksService('tasks.googleapis.com:443', credentials);
 
       // For now, we'll throw an error indicating proto definitions are needed
-      throw new Error('Google Tasks API gRPC proto definitions must be configured. Please ensure proto files are available.');
+      throw new Error('gRPC proto definitions not yet configured');
     }
 
     return this.tasksService;
