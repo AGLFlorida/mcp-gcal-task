@@ -1,4 +1,4 @@
-import { GoogleTasksHandler, Task, CreateTaskRequest, ListTasksRequest, UpdateTaskRequest, DeleteTaskRequest } from './tasks-handler';
+import { GoogleTasksHandler, CreateTaskRequest, ListTasksRequest, UpdateTaskRequest, DeleteTaskRequest } from './tasks-handler';
 import { GoogleAuthManager } from './auth';
 
 jest.mock('./auth');
@@ -46,6 +46,7 @@ describe('GoogleTasksHandler', () => {
         await tasksHandler.listTaskLists();
       } catch (error) {
         // Expected to throw
+        expect(error).toBeUndefined();
       }
 
       expect(mockAuthManager.getGrpcCredentials).toHaveBeenCalled();
@@ -90,6 +91,7 @@ describe('GoogleTasksHandler', () => {
         await tasksHandler.createTask(createRequest);
       } catch (error) {
         // Expected to throw
+        expect(error).toBeUndefined();
       }
 
       expect(mockAuthManager.getGrpcCredentials).toHaveBeenCalled();
@@ -146,6 +148,7 @@ describe('GoogleTasksHandler', () => {
         await tasksHandler.listTasks(listRequest);
       } catch (error) {
         // Expected to throw
+        expect(error).toBeUndefined();
       }
 
       expect(mockAuthManager.getGrpcCredentials).toHaveBeenCalled();
@@ -203,6 +206,7 @@ describe('GoogleTasksHandler', () => {
         await tasksHandler.updateTask(updateRequest);
       } catch (error) {
         // Expected to throw
+        expect(error).toBeUndefined();
       }
 
       expect(mockAuthManager.getGrpcCredentials).toHaveBeenCalled();
@@ -259,6 +263,7 @@ describe('GoogleTasksHandler', () => {
         await tasksHandler.deleteTask(deleteRequest);
       } catch (error) {
         // Expected to throw
+        expect(error).toBeUndefined();
       }
 
       expect(mockAuthManager.getGrpcCredentials).toHaveBeenCalled();

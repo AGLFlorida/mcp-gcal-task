@@ -6,7 +6,7 @@ jest.mock('ws');
 describe('WebSocketTransport', () => {
   let mockWebSocket: jest.Mocked<WebSocket>;
   let transport: WebSocketTransport;
-  let messageHandlers: Array<(data: Buffer) => void>;
+  //let messageHandlers: Array<(data: Buffer) => void>;
   let eventHandlers: {
     message?: (data: Buffer) => void;
     close?: () => void;
@@ -15,7 +15,7 @@ describe('WebSocketTransport', () => {
   };
 
   beforeEach(() => {
-    messageHandlers = [];
+    //messageHandlers = [];
     eventHandlers = {};
 
     mockWebSocket = {
