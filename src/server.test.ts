@@ -141,7 +141,7 @@ describe('Server', () => {
 
     // Reset and setup mocks before each test
     jest.clearAllMocks();
-    
+
     // Set the mock instances that the factory functions will use
     mockInstances.server = mockServer;
     mockInstances.webSocketServer = mockWebSocketServer;
@@ -151,10 +151,6 @@ describe('Server', () => {
     mockInstances.transport = mockTransport;
 
     jest.spyOn(console, 'log').mockImplementation();
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation((...args) => {
-      // Log errors for debugging
-      console.log('Console.error called with:', args);
-    });
     jest.spyOn(process, 'on').mockImplementation();
     jest.spyOn(process, 'exit').mockImplementation();
   });
