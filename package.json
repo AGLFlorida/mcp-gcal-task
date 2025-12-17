@@ -2,8 +2,13 @@
   "name": "mcp-gcal-task",
   "version": "0.0.1-alpha",
   "description": "MCP server to create tasks in a google calendar / task list",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
+    "start": "node dist/server.js",
+    "stop": "node dist/stop.js",
+    "status": "node dist/status.js",
+    "build": "tsc",
+    "dev": "ts-node src/server.ts",
     "test": "jest",
     "lint": "eslint src/**"
   },
@@ -16,9 +21,21 @@
   ],
   "author": "brandon@aglflorida.com",
   "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@grpc/grpc-js": "^1.10.0",
+    "@grpc/proto-loader": "^0.7.10",
+    "google-auth-library": "^9.0.0",
+    "ws": "^8.16.0",
+    "chalk": "^4.1.2",
+    "dotenv": "^16.4.5"
+  },
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^25.0.3",
-    "eslint": "^9.39.2"
+    "@types/ws": "^8.5.10",
+    "eslint": "^9.39.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
   }
 }

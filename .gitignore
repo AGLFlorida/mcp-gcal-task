@@ -132,3 +132,4 @@ dist/
 build/
 *.tsbuildinfo
 
+.DS_Store

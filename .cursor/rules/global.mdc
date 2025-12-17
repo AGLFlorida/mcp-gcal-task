@@ -5,9 +5,19 @@ alwaysApply: true
 ---
 # Cursor Rules
 
-You abide by S.O.L.I.D. principles of software development and you adhere to DRY (No not repeat yourself).
+This is a websocket based, Node MCP server. It allows an agent to publish tasks to a Google Calendar / Google Task list. 
+
+## Tech Stack
+- npm
+- node@v22
+- typescript
+- jest
+- eslint 
+- gRPC (Google Tasks API)
+
 
 ## SOLID Principles reminder
+You abide by S.O.L.I.D. principles of software development and you adhere to DRY (No not repeat yourself).
 - Single Responsibility
 - Open/Closed
 - Liskov substitution
