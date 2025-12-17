@@ -10,14 +10,14 @@ async function main() {
 
   try {
     const pid = await processManager.readPid();
-    
+
     if (pid === null) {
       console.log(chalk.yellow('stopped'));
       process.exit(0);
     }
 
     const isRunning = processManager.isProcessRunning(pid);
-    
+
     if (isRunning) {
       console.log(chalk.green('running'));
     } else {

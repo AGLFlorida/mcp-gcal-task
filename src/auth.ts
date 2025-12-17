@@ -43,21 +43,21 @@ export class GoogleAuthManager {
   async getGrpcCredentials(): Promise<grpc.ChannelCredentials> {
     try {
       const accessToken = await this.getAccessToken();
-      
+
       // Create call credentials from the access token
       const callCredentials = grpc.credentials.createFromMetadataGenerator(
         async (_params: grpc.CallMetadataOptions, callback: grpc.MetadataGeneratorCallback) => {
           const metadata = new grpc.Metadata();
           metadata.add('authorization', `Bearer ${accessToken}`);
           callback(null, metadata);
-        }
+        },
       );
 
       // Combine SSL credentials with call credentials
       const sslCredentials = grpc.credentials.createSsl();
       return grpc.credentials.combineChannelCredentials(
         sslCredentials,
-        callCredentials
+        callCredentials,
       );
     } catch (error) {
       throw new Error(`Failed to create gRPC credentials: ${error}`);

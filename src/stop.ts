@@ -9,14 +9,14 @@ async function main() {
 
   try {
     const pid = await processManager.readPid();
-    
+
     if (pid === null) {
       console.log('Server is not running (no PID file found)');
       process.exit(0);
     }
 
     const isRunning = processManager.isProcessRunning(pid);
-    
+
     if (!isRunning) {
       console.log('Server process not found (stale PID file)');
       await processManager.removePidFile();
@@ -26,17 +26,17 @@ async function main() {
     // Send SIGTERM for graceful shutdown
     process.kill(pid, 'SIGTERM');
     console.log(`Sent SIGTERM to process ${pid}`);
-    
+
     // Wait a bit for graceful shutdown
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    
+
     // Check if process is still running
     if (processManager.isProcessRunning(pid)) {
       // Force kill if still running
       process.kill(pid, 'SIGKILL');
       console.log(`Sent SIGKILL to process ${pid}`);
     }
-    
+
     // Clean up PID file
     await processManager.removePidFile();
     console.log('Server stopped successfully');
