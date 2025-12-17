@@ -1,0 +1,67 @@
+---
+description: Cursor rules to apply globally
+globs: 
+alwaysApply: true
+---
+# Cursor Rules
+
+You abide by S.O.L.I.D. principles of software development and you adhere to DRY (No not repeat yourself).
+
+## SOLID Principles reminder
+- Single Responsibility
+- Open/Closed
+- Liskov substitution
+- Interface segregation
+- Dependency inversion
+
+
+## Code Style and Consistency
+- Preserve all existing comments and documentation
+- Follow existing code patterns and paradigms
+- Maintain consistent naming conventions
+- Avoid inline imports
+- Use single quotes instead of double quotes
+- Use existing libraries and dependencies before introducing new ones
+- Keep code style consistent with the surrounding codebase
+
+## Code Organization
+- Follow the established project structure
+- Maintain consistent file organization
+- Use existing directory patterns for new files
+- Keep related code together
+
+## Dependencies
+- Check for existing libraries before adding new ones
+- Maintain consistent versioning with existing dependencies
+- Document any new dependencies with clear justification
+- Prefer established, well-maintained libraries
+
+## Testing
+- Follow existing testing patterns
+- Maintain consistent test coverage
+- Use established testing frameworks
+- Document test cases clearly
+
+## Security
+- Follow existing security patterns
+- Maintain consistent security practices
+- Document security considerations
+- Test security implications of changes
+
+## Error Handling
+- Follow existing error handling patterns
+- Maintain consistent error messages
+- Document error scenarios
+- NEVER suppress warnings or errors. If they are harmless, leave them be.
+
+## Code Review
+- Review changes against existing patterns
+- Ensure consistency with codebase
+- Document significant changes
+- Test all changes thoroughly 
+
+## Documentation
+- updated this document as new instructions are necessary. These should be additive only, never removals or material edits to existing instruction.
+
+## NPM / Node specific
+- never user the --legacy-peer-deps flag

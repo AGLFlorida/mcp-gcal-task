@@ -1,0 +1,24 @@
+{
+  "name": "mcp-gcal-task",
+  "version": "0.0.1-alpha",
+  "description": "MCP server to create tasks in a google calendar / task list",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src/**"
+  },
+  "repository": {
+    "type": "git",
+    "url": "tbd"
+  },
+  "keywords": [
+    "mcp"
+  ],
+  "author": "brandon@aglflorida.com",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.3",
+    "eslint": "^9.39.2"
+  }
+}
