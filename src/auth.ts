@@ -1,5 +1,6 @@
-import { GoogleAuth } from 'google-auth-library';
+import { OAuth2Client } from 'google-auth-library';
 import * as grpc from '@grpc/grpc-js';
+import type { CallMetadataOptions } from '@grpc/grpc-js/build/src/call-credentials';
 
 export interface AuthConfig {
   clientId: string;
@@ -9,7 +10,7 @@ export interface AuthConfig {
 }
 
 export class GoogleAuthManager {
-  private auth: GoogleAuth;
+  private auth: OAuth2Client;
   private config: AuthConfig;
   private scopes: string[];
 
@@ -19,18 +20,16 @@ export class GoogleAuthManager {
       'https://www.googleapis.com/auth/tasks',
     ];
 
-    this.auth = new GoogleAuth({
+    this.auth = new OAuth2Client({
       clientId: config.clientId,
       clientSecret: config.clientSecret,
       redirectUri: config.redirectUri,
-      scopes: this.scopes,
     });
   }
 
   async getAccessToken(): Promise<string> {
     try {
-      const client = await this.auth.getClient();
-      const tokenResponse = await client.getAccessToken();
+      const tokenResponse = await this.auth.getAccessToken();
       if (!tokenResponse.token) {
         throw new Error('Failed to obtain access token');
       }
@@ -46,7 +45,7 @@ export class GoogleAuthManager {
 
       // Create call credentials from the access token
       const callCredentials = grpc.credentials.createFromMetadataGenerator(
-        async (_params: grpc.CallMetadataOptions, callback: grpc.MetadataGeneratorCallback) => {
+        (options: CallMetadataOptions, callback: (err: Error | null, metadata?: grpc.Metadata) => void) => {
           const metadata = new grpc.Metadata();
           metadata.add('authorization', `Bearer ${accessToken}`);
           callback(null, metadata);
@@ -75,7 +74,7 @@ export class GoogleAuthManager {
     }
   }
 
-  getAuthClient(): GoogleAuth {
+  getAuthClient(): OAuth2Client {
     return this.auth;
   }
 }

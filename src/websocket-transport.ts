@@ -1,4 +1,4 @@
-import { Transport } from '@modelcontextprotocol/sdk/server/types.js';
+import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import { WebSocket } from 'ws';
 
 export class WebSocketTransport implements Transport {

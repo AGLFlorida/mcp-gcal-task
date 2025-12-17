@@ -179,6 +179,9 @@ async function main() {
     if (!callToolHandlerRef) {
       callToolHandlerRef = async (_req: any) => {
     const { name, arguments: args } = request.params;
+    if (!args) {
+      throw new Error('Missing arguments in tool call');
+    }
 
     try {
       switch (name) {
