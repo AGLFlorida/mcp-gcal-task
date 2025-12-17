@@ -99,7 +99,7 @@ describe('GoogleAuthManager', () => {
       const manager = new GoogleAuthManager(authConfig);
 
       await expect(manager.getAccessToken()).rejects.toThrow(
-        'Failed to obtain access token'
+        'Failed to obtain access token',
       );
     });
 
@@ -109,7 +109,7 @@ describe('GoogleAuthManager', () => {
       const manager = new GoogleAuthManager(authConfig);
 
       await expect(manager.getAccessToken()).rejects.toThrow(
-        'Failed to obtain access token'
+        'Failed to obtain access token',
       );
     });
 
@@ -120,7 +120,7 @@ describe('GoogleAuthManager', () => {
       const manager = new GoogleAuthManager(authConfig);
 
       await expect(manager.getAccessToken()).rejects.toThrow(
-        'Authentication failed: Error: Authentication failed'
+        'Authentication failed: Error: Authentication failed',
       );
     });
 
@@ -131,7 +131,7 @@ describe('GoogleAuthManager', () => {
       const manager = new GoogleAuthManager(authConfig);
 
       await expect(manager.getAccessToken()).rejects.toThrow(
-        'Authentication failed: Error: Token request failed'
+        'Authentication failed: Error: Token request failed',
       );
     });
   });
@@ -172,7 +172,7 @@ describe('GoogleAuthManager', () => {
       const manager = new GoogleAuthManager(authConfig);
 
       await expect(manager.getGrpcCredentials()).rejects.toThrow(
-        'Failed to create gRPC credentials: Error: Authentication failed: Error: Token error'
+        'Failed to create gRPC credentials: Error: Authentication failed: Error: Token error',
       );
     });
   });
@@ -198,7 +198,7 @@ describe('GoogleAuthManager', () => {
       const manager = new GoogleAuthManager(authConfig);
 
       await expect(manager.getMetadata()).rejects.toThrow(
-        'Failed to create metadata: Error: Authentication failed: Error: Token error'
+        'Failed to create metadata: Error: Authentication failed: Error: Token error',
       );
     });
   });

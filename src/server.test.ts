@@ -163,7 +163,7 @@ describe('Server', () => {
           capabilities: {
             tools: {},
           },
-        }
+        },
       );
     });
 
@@ -470,7 +470,7 @@ describe('Server', () => {
       await import('./server');
       // Simulate connection
       const connectionHandler = mockWebSocketServer.on.mock.calls.find(
-        (call) => call[0] === 'connection'
+        (call) => call[0] === 'connection',
       )?.[1];
       if (connectionHandler) {
         await connectionHandler(mockWebSocket);

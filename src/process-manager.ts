@@ -34,7 +34,13 @@ export class ProcessManager {
       }
       return pid;
     } catch (error) {
-      return null;
+      // File doesn't exist - this is expected (no PID file yet)
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
+        return null;
+      }
+      // Unexpected error - log to stderr and throw
+      console.error('Unexpected error reading PID file:', error);
+      throw error;
     }
   }
 
@@ -43,7 +49,13 @@ export class ProcessManager {
       await access(this.pidFilePath);
       await unlink(this.pidFilePath);
     } catch (error) {
-      // Ignore if file doesn't exist
+      // File doesn't exist - idempotent operation, succeed silently
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
+        return;
+      }
+      // Unexpected error - log to stderr and throw
+      console.error('Unexpected error removing PID file:', error);
+      throw error;
     }
   }
 
@@ -53,7 +65,13 @@ export class ProcessManager {
       process.kill(pid, 0);
       return true;
     } catch (error) {
-      return false;
+      // Process doesn't exist (expected) - ESRCH error code
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'ESRCH') {
+        return false;
+      }
+      // Unexpected error - log to stderr and throw
+      console.error('Unexpected error checking if process is running:', error);
+      throw error;
     }
   }
 

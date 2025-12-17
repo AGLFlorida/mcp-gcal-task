@@ -58,7 +58,7 @@ describe('ProcessManager', () => {
         processManager.getPidFilePath(),
         mockPid.toString(),
         'utf8',
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -69,7 +69,7 @@ describe('ProcessManager', () => {
       });
 
       await expect(processManager.writePid(mockPid)).rejects.toThrow(
-        'Failed to write PID file: Error: Write failed'
+        'Failed to write PID file: Error: Write failed',
       );
     });
   });
@@ -91,12 +91,12 @@ describe('ProcessManager', () => {
 
       expect(fs.access).toHaveBeenCalledWith(
         processManager.getPidFilePath(),
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(fs.readFile).toHaveBeenCalledWith(
         processManager.getPidFilePath(),
         'utf8',
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(result).toBe(mockPid);
     });
@@ -182,11 +182,11 @@ describe('ProcessManager', () => {
 
       expect(fs.access).toHaveBeenCalledWith(
         processManager.getPidFilePath(),
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(fs.unlink).toHaveBeenCalledWith(
         processManager.getPidFilePath(),
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 

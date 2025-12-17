@@ -18,7 +18,10 @@ export default [
     },
     rules: {
       'no-console': 'off',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': ['warn', { 
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      }],
       'prefer-const': 'warn',
       'no-var': 'error',
       'object-shorthand': 'warn',
@@ -32,7 +35,7 @@ export default [
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', '**/*.test.ts', '**/*.test.js'],
+    ignores: ['dist/**', 'node_modules/**'],
   },
 ];
 

@@ -44,7 +44,7 @@ async function main() {
       capabilities: {
         tools: {},
       },
-    }
+    },
   );
 
   // Store handler references for WebSocket routing
@@ -177,7 +177,7 @@ async function main() {
   // Handle tool calls
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
     if (!callToolHandlerRef) {
-      callToolHandlerRef = async (req: any) => {
+      callToolHandlerRef = async (_req: any) => {
     const { name, arguments: args } = request.params;
 
     try {
@@ -278,6 +278,7 @@ async function main() {
         ],
         isError: true,
       };
+    }
       };
     }
     return await callToolHandlerRef(request);
@@ -335,7 +336,7 @@ async function main() {
         await transport.send({
           jsonrpc: '2.0',
           id: message.id,
-          result: result,
+          result,
         });
       } catch (error) {
         console.error('Error handling request:', error);

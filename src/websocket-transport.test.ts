@@ -194,7 +194,7 @@ describe('WebSocketTransport', () => {
 
       expect(consoleSpy).toHaveBeenCalledWith(
         'Failed to parse WebSocket message:',
-        expect.any(Error)
+        expect.any(Error),
       );
       expect(handler).not.toHaveBeenCalled();
       consoleSpy.mockRestore();

@@ -34,7 +34,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getMetadata.mockResolvedValue({} as any);
 
       await expect(tasksHandler.listTaskLists()).rejects.toThrow(
-        'gRPC proto definitions not yet configured'
+        'gRPC proto definitions not yet configured',
       );
     });
 
@@ -57,7 +57,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getGrpcCredentials.mockRejectedValue(error);
 
       await expect(tasksHandler.listTaskLists()).rejects.toThrow(
-        'Failed to list task lists: Error: Auth error'
+        'Failed to list task lists: Error: Auth error',
       );
     });
   });
@@ -78,7 +78,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getMetadata.mockResolvedValue({} as any);
 
       await expect(tasksHandler.createTask(createRequest)).rejects.toThrow(
-        'gRPC proto definitions not yet configured'
+        'gRPC proto definitions not yet configured',
       );
     });
 
@@ -108,7 +108,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getMetadata.mockResolvedValue({} as any);
 
       await expect(tasksHandler.createTask(minimalRequest)).rejects.toThrow(
-        'gRPC proto definitions not yet configured'
+        'gRPC proto definitions not yet configured',
       );
     });
 
@@ -117,7 +117,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getGrpcCredentials.mockRejectedValue(error);
 
       await expect(tasksHandler.createTask(createRequest)).rejects.toThrow(
-        'Failed to create task: Error: Auth error'
+        'Failed to create task: Error: Auth error',
       );
     });
   });
@@ -134,7 +134,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getMetadata.mockResolvedValue({} as any);
 
       await expect(tasksHandler.listTasks(listRequest)).rejects.toThrow(
-        'gRPC proto definitions not yet configured'
+        'gRPC proto definitions not yet configured',
       );
     });
 
@@ -161,7 +161,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getMetadata.mockResolvedValue({} as any);
 
       await expect(tasksHandler.listTasks(minimalRequest)).rejects.toThrow(
-        'gRPC proto definitions not yet configured'
+        'gRPC proto definitions not yet configured',
       );
     });
 
@@ -170,7 +170,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getGrpcCredentials.mockRejectedValue(error);
 
       await expect(tasksHandler.listTasks(listRequest)).rejects.toThrow(
-        'Failed to list tasks: Error: Auth error'
+        'Failed to list tasks: Error: Auth error',
       );
     });
   });
@@ -191,7 +191,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getMetadata.mockResolvedValue({} as any);
 
       await expect(tasksHandler.updateTask(updateRequest)).rejects.toThrow(
-        'gRPC proto definitions not yet configured'
+        'gRPC proto definitions not yet configured',
       );
     });
 
@@ -222,7 +222,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getMetadata.mockResolvedValue({} as any);
 
       await expect(tasksHandler.updateTask(partialRequest)).rejects.toThrow(
-        'gRPC proto definitions not yet configured'
+        'gRPC proto definitions not yet configured',
       );
     });
 
@@ -231,7 +231,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getGrpcCredentials.mockRejectedValue(error);
 
       await expect(tasksHandler.updateTask(updateRequest)).rejects.toThrow(
-        'Failed to update task: Error: Auth error'
+        'Failed to update task: Error: Auth error',
       );
     });
   });
@@ -247,7 +247,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getMetadata.mockResolvedValue({} as any);
 
       await expect(tasksHandler.deleteTask(deleteRequest)).rejects.toThrow(
-        'gRPC proto definitions not yet configured'
+        'gRPC proto definitions not yet configured',
       );
     });
 
@@ -270,7 +270,7 @@ describe('GoogleTasksHandler', () => {
       mockAuthManager.getGrpcCredentials.mockRejectedValue(error);
 
       await expect(tasksHandler.deleteTask(deleteRequest)).rejects.toThrow(
-        'Failed to delete task: Error: Auth error'
+        'Failed to delete task: Error: Auth error',
       );
     });
   });

@@ -1,4 +1,3 @@
-import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
 import { GoogleAuthManager } from './auth';
 
@@ -59,7 +58,7 @@ export class GoogleTasksHandler {
 
     // This is a placeholder - in production, you would load the actual proto file
     // from Google's API repository or use their published proto definitions
-    const PROTO_OPTIONS: protoLoader.Options = {
+    const _PROTO_OPTIONS: protoLoader.Options = {
       keepCase: true,
       longs: String,
       enums: String,
@@ -80,7 +79,7 @@ export class GoogleTasksHandler {
     await this.loadProtoDefinitions();
 
     if (!this.tasksService) {
-      const credentials = await this.authManager.getGrpcCredentials();
+      const _credentials = await this.authManager.getGrpcCredentials();
       // Create gRPC client stub once proto definitions are loaded
       // Example: this.tasksService = new tasksProto.TasksService('tasks.googleapis.com:443', credentials);
 
@@ -93,8 +92,8 @@ export class GoogleTasksHandler {
 
   async listTaskLists(): Promise<TaskList[]> {
     try {
-      const client = await this.getClient();
-      const metadata = await this.authManager.getMetadata();
+      const _client = await this.getClient();
+      const _metadata = await this.authManager.getMetadata();
 
       return new Promise((resolve, reject) => {
         // This would be the actual gRPC call once proto is defined
@@ -113,10 +112,10 @@ export class GoogleTasksHandler {
     }
   }
 
-  async createTask(request: CreateTaskRequest): Promise<Task> {
+  async createTask(_request: CreateTaskRequest): Promise<Task> {
     try {
-      const client = await this.getClient();
-      const metadata = await this.authManager.getMetadata();
+      const _client = await this.getClient();
+      const _metadata = await this.authManager.getMetadata();
 
       return new Promise((resolve, reject) => {
         // This would be the actual gRPC call once proto is defined
@@ -135,10 +134,10 @@ export class GoogleTasksHandler {
     }
   }
 
-  async listTasks(request: ListTasksRequest): Promise<Task[]> {
+  async listTasks(_request: ListTasksRequest): Promise<Task[]> {
     try {
-      const client = await this.getClient();
-      const metadata = await this.authManager.getMetadata();
+      const _client = await this.getClient();
+      const _metadata = await this.authManager.getMetadata();
 
       return new Promise((resolve, reject) => {
         // This would be the actual gRPC call once proto is defined
@@ -161,10 +160,10 @@ export class GoogleTasksHandler {
     }
   }
 
-  async updateTask(request: UpdateTaskRequest): Promise<Task> {
+  async updateTask(_request: UpdateTaskRequest): Promise<Task> {
     try {
-      const client = await this.getClient();
-      const metadata = await this.authManager.getMetadata();
+      const _client = await this.getClient();
+      const _metadata = await this.authManager.getMetadata();
 
       return new Promise((resolve, reject) => {
         // This would be the actual gRPC call once proto is defined
@@ -187,10 +186,10 @@ export class GoogleTasksHandler {
     }
   }
 
-  async deleteTask(request: DeleteTaskRequest): Promise<void> {
+  async deleteTask(_request: DeleteTaskRequest): Promise<void> {
     try {
-      const client = await this.getClient();
-      const metadata = await this.authManager.getMetadata();
+      const _client = await this.getClient();
+      const _metadata = await this.authManager.getMetadata();
 
       return new Promise((resolve, reject) => {
         // This would be the actual gRPC call once proto is defined
