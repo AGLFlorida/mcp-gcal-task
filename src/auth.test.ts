@@ -1,4 +1,4 @@
-import { GoogleAuth } from 'google-auth-library';
+import { OAuth2Client } from 'google-auth-library';
 import * as grpc from '@grpc/grpc-js';
 import { GoogleAuthManager, AuthConfig } from './auth';
 
@@ -21,8 +21,9 @@ jest.mock('@grpc/grpc-js', () => {
 });
 
 describe('GoogleAuthManager', () => {
-  let mockGoogleAuth: jest.Mocked<GoogleAuth>;
-  let mockClient: any;
+  let mockOAuth2Client: {
+    getAccessToken: jest.Mock<Promise<{ token: string | null | undefined }>>;
+  };
   let authConfig: AuthConfig;
 
   beforeEach(() => {
@@ -32,16 +33,12 @@ describe('GoogleAuthManager', () => {
       redirectUri: 'http://localhost:3000/oauth2callback',
     };
 
-    mockClient = {
+    mockOAuth2Client = {
       getAccessToken: jest.fn(),
     };
 
-    mockGoogleAuth = {
-      getClient: jest.fn().mockResolvedValue(mockClient),
-    } as any;
-
-    (GoogleAuth as jest.MockedClass<typeof GoogleAuth>).mockImplementation(() => {
-      return mockGoogleAuth;
+    (OAuth2Client as jest.MockedClass<typeof OAuth2Client>).mockImplementation(() => {
+      return mockOAuth2Client as any;
     });
   });
 
@@ -53,13 +50,12 @@ describe('GoogleAuthManager', () => {
     it('should initialize with provided config and default scopes', () => {
       const manager = new GoogleAuthManager(authConfig);
 
-      expect(GoogleAuth).toHaveBeenCalledWith({
+      expect(OAuth2Client).toHaveBeenCalledWith({
         clientId: authConfig.clientId,
         clientSecret: authConfig.clientSecret,
         redirectUri: authConfig.redirectUri,
-        scopes: ['https://www.googleapis.com/auth/tasks'],
       });
-      expect(manager.getAuthClient()).toBe(mockGoogleAuth);
+      expect(manager.getAuthClient()).toBe(mockOAuth2Client);
     });
 
     it('should initialize with custom scopes when provided', () => {
@@ -71,11 +67,10 @@ describe('GoogleAuthManager', () => {
 
       new GoogleAuthManager(configWithScopes);
 
-      expect(GoogleAuth).toHaveBeenCalledWith({
+      expect(OAuth2Client).toHaveBeenCalledWith({
         clientId: authConfig.clientId,
         clientSecret: authConfig.clientSecret,
         redirectUri: authConfig.redirectUri,
-        scopes: customScopes,
       });
     });
   });
@@ -83,18 +78,17 @@ describe('GoogleAuthManager', () => {
   describe('getAccessToken', () => {
     it('should return access token successfully', async () => {
       const token = 'test-access-token';
-      mockClient.getAccessToken.mockResolvedValue({ token });
+      mockOAuth2Client.getAccessToken.mockResolvedValue({ token });
 
       const manager = new GoogleAuthManager(authConfig);
       const result = await manager.getAccessToken();
 
-      expect(mockGoogleAuth.getClient).toHaveBeenCalled();
-      expect(mockClient.getAccessToken).toHaveBeenCalled();
+      expect(mockOAuth2Client.getAccessToken).toHaveBeenCalled();
       expect(result).toBe(token);
     });
 
     it('should throw error when token is missing', async () => {
-      mockClient.getAccessToken.mockResolvedValue({ token: null });
+      mockOAuth2Client.getAccessToken.mockResolvedValue({ token: null });
 
       const manager = new GoogleAuthManager(authConfig);
 
@@ -104,7 +98,7 @@ describe('GoogleAuthManager', () => {
     });
 
     it('should throw error when token is undefined', async () => {
-      mockClient.getAccessToken.mockResolvedValue({ token: undefined });
+      mockOAuth2Client.getAccessToken.mockResolvedValue({ token: undefined });
 
       const manager = new GoogleAuthManager(authConfig);
 
@@ -115,7 +109,7 @@ describe('GoogleAuthManager', () => {
 
     it('should handle authentication failures', async () => {
       const error = new Error('Authentication failed');
-      mockGoogleAuth.getClient.mockRejectedValue(error);
+      mockOAuth2Client.getAccessToken.mockRejectedValue(error);
 
       const manager = new GoogleAuthManager(authConfig);
 
@@ -126,7 +120,7 @@ describe('GoogleAuthManager', () => {
 
     it('should handle getAccessToken failures', async () => {
       const error = new Error('Token request failed');
-      mockClient.getAccessToken.mockRejectedValue(error);
+      mockOAuth2Client.getAccessToken.mockRejectedValue(error);
 
       const manager = new GoogleAuthManager(authConfig);
 
@@ -138,15 +132,14 @@ describe('GoogleAuthManager', () => {
 
   describe('getGrpcCredentials', () => {
     beforeEach(() => {
-      mockClient.getAccessToken.mockResolvedValue({ token: 'test-token' });
+      mockOAuth2Client.getAccessToken.mockResolvedValue({ token: 'test-token' });
     });
 
     it('should create gRPC credentials successfully', async () => {
       const manager = new GoogleAuthManager(authConfig);
       const credentials = await manager.getGrpcCredentials();
 
-      expect(mockGoogleAuth.getClient).toHaveBeenCalled();
-      expect(mockClient.getAccessToken).toHaveBeenCalled();
+      expect(mockOAuth2Client.getAccessToken).toHaveBeenCalled();
       expect(credentials).toBeDefined();
       expect(grpc.credentials.createSsl).toHaveBeenCalled();
       expect(grpc.credentials.createFromMetadataGenerator).toHaveBeenCalled();
@@ -155,7 +148,7 @@ describe('GoogleAuthManager', () => {
 
     it('should include Bearer token in metadata', async () => {
       const token = 'test-bearer-token';
-      mockClient.getAccessToken.mockResolvedValue({ token });
+      mockOAuth2Client.getAccessToken.mockResolvedValue({ token });
 
       const manager = new GoogleAuthManager(authConfig);
       await manager.getGrpcCredentials();
@@ -167,7 +160,7 @@ describe('GoogleAuthManager', () => {
 
     it('should handle errors when getting access token', async () => {
       const error = new Error('Token error');
-      mockClient.getAccessToken.mockRejectedValue(error);
+      mockOAuth2Client.getAccessToken.mockRejectedValue(error);
 
       const manager = new GoogleAuthManager(authConfig);
 
@@ -180,20 +173,19 @@ describe('GoogleAuthManager', () => {
   describe('getMetadata', () => {
     it('should create metadata with Bearer token successfully', async () => {
       const token = 'test-metadata-token';
-      mockClient.getAccessToken.mockResolvedValue({ token });
+      mockOAuth2Client.getAccessToken.mockResolvedValue({ token });
 
       const manager = new GoogleAuthManager(authConfig);
       const metadata = await manager.getMetadata();
 
-      expect(mockGoogleAuth.getClient).toHaveBeenCalled();
-      expect(mockClient.getAccessToken).toHaveBeenCalled();
+      expect(mockOAuth2Client.getAccessToken).toHaveBeenCalled();
       expect(metadata).toBeDefined();
       expect(metadata.add).toHaveBeenCalledWith('authorization', `Bearer ${token}`);
     });
 
     it('should handle errors when getting access token', async () => {
       const error = new Error('Token error');
-      mockClient.getAccessToken.mockRejectedValue(error);
+      mockOAuth2Client.getAccessToken.mockRejectedValue(error);
 
       const manager = new GoogleAuthManager(authConfig);
 
@@ -204,11 +196,11 @@ describe('GoogleAuthManager', () => {
   });
 
   describe('getAuthClient', () => {
-    it('should return the GoogleAuth client instance', () => {
+    it('should return the OAuth2Client instance', () => {
       const manager = new GoogleAuthManager(authConfig);
       const client = manager.getAuthClient();
 
-      expect(client).toBe(mockGoogleAuth);
+      expect(client).toBe(mockOAuth2Client);
     });
   });
 });
