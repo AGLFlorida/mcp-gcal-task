@@ -1,5 +1,7 @@
 # MCP Google Tasks Server
 
+![TASKER](img/tasker_logo.png)
+
 An MCP (Model Context Protocol) server that runs as a WebSocket server, allowing clients to publish tasks to Google Tasks via the Google Tasks API using gRPC.
 
 ![MCP Google Tasks Server Architecture](img/flow.svg)
